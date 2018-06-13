@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.SwingUtilities;
 
 /**
@@ -12,7 +11,7 @@ import javax.swing.SwingUtilities;
  *
  */
 
-public class TestCalculations {
+public class CalculationFunctions {
 
 	static List<Double[]> sets = new ArrayList<Double[]>();
 	static List<Integer> cts = new ArrayList<Integer>();
