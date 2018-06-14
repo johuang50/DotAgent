@@ -120,7 +120,6 @@ public class FieldDiagramWindow extends JPanel {
 		// TransferableImage trans = new TransferableImage( i );
 		// Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
 		// c.setContents( trans, this );
-		System.out.println("Copied!");
 	}
 
 	public static BufferedImage createImage(JPanel panel) {
@@ -177,7 +176,7 @@ public class FieldDiagramWindow extends JPanel {
 			e.printStackTrace();
 		}
 		JFrame frame = new JFrame("Field Diagram");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		JButton saveBtn = new JButton(new ImageIcon("wincap.png"));
 		ImageIcon icon = new ImageIcon("Novi-Logo.png");
 		JLabel logoLbl = new JLabel(icon);

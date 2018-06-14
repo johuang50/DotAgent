@@ -27,15 +27,13 @@ public class CalculationFunctions {
 		});
 	}
 
-	private static List<Double[]> getPoints(List<Double[]> in, int counts, Side side, Location loc, int line, DirectionX dx, DirectionY dy, double stepsx, double stepsy) {
+	public static List<Double[]> getPoints(List<Double[]> in, int counts, Side side, Location loc, int line, DirectionX dx, DirectionY dy, double stepsx, double stepsy) {
 		cts.add(counts);
 		cts.add(32);
-		in.clear();
 		double pt2 = (double)15/(double)8;
 		double pt = (double)160/pt2;
 		Double[] point = {(double) 0,(double) 0};
-		Double[] point2 = {(double) 100,(double) 80};
-		System.out.println(pt);
+//		Double[] point2 = {(double) 100,(double) 80};
 
 		if (side == Side.TWO) {
 			
@@ -47,10 +45,10 @@ public class CalculationFunctions {
 			
 		}
 		point[1] = loc.getValue() + stepsy*dy.getValue();
-		System.out.println(loc.getValue());
+//		System.out.println(loc.getValue());
 		in.add(point);
-		in.add(point2);
-		System.out.println(in.toString());
+//		in.add(point2);
+//		System.out.println(in.toString());
 		return in;
 	}
 
