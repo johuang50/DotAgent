@@ -46,7 +46,7 @@ public class CalculationFunctions {
 		}
 		point[1] = loc.getValue() + stepsy*dy.getValue();
 //		System.out.println(loc.getValue());
-		in.add(point);
+		in.add(DotAgentGUI.jComboBox1.getSelectedIndex(), point);
 //		in.add(point2);
 //		System.out.println(in.toString());
 		return in;

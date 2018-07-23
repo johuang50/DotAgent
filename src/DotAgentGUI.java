@@ -9,6 +9,15 @@ public class DotAgentGUI extends javax.swing.JFrame {
 
 	public static List<Double[]> output = new ArrayList<Double[]>();
 	public static List<Integer> cts = new ArrayList<Integer>();
+	public static List<String> xVal = new ArrayList<String>();
+	public static List<String> yVal = new ArrayList<String>();
+	public static List<Boolean> side1 = new ArrayList<Boolean>();
+	public static List<Boolean> xDir = new ArrayList<Boolean>();
+	public static List<Boolean> yDir = new ArrayList<Boolean>();
+	public static List<Integer> ydIndex = new ArrayList<Integer>();
+	public static List<Integer> vertIndex = new ArrayList<Integer>();
+	private static boolean setLabels = true;
+	private static boolean countLabels = true;
 
 	/**
 	 * Creates new form DotAgentGUI
@@ -50,14 +59,15 @@ public class DotAgentGUI extends javax.swing.JFrame {
 		setTitle("Dot Agent");
 		setResizable(false);
 
+		jTextField1.setToolTipText("Press ENTER to update");
+
 		jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 		jLabel1.setText("NOVI WILDCAT MARCHING BAND DOT AGENT 2018");
 
 		jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
 		jLabel2.setText("Selcted Set:");
 
-		jComboBox1.setModel(
-				new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+		jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0" }));
 
 		jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
 		jLabel3.setText("First Set:");
@@ -107,7 +117,19 @@ public class DotAgentGUI extends javax.swing.JFrame {
 
 		jCheckBox1.setText("Set Labels");
 
+		jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				setLabels = jCheckBox1.isSelected();
+			}
+		});
+
 		jCheckBox2.setText("Count Labels");
+
+		jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				countLabels = jCheckBox2.isSelected();
+			}
+		});
 
 		jLabel5.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
 		jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
@@ -201,8 +223,13 @@ public class DotAgentGUI extends javax.swing.JFrame {
 		pack();
 	}// </editor-fold>
 
-	private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {
+	private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {// *******************************************
 		// TODO add your handling code here:
+		try {
+			updateComboBox(Integer.parseInt(jTextField1.getText()));
+		} catch (java.lang.NumberFormatException ex) {
+			(new WarningMessage("Please make sure you entered the initial set correctly")).setVisible(true);
+		}
 	}
 
 	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -212,25 +239,57 @@ public class DotAgentGUI extends javax.swing.JFrame {
 
 	private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
-		(new SetWindow(false)).setVisible(true);
+		boolean error = false;
+		try {
+			cts.get(jComboBox1.getSelectedIndex());			
+		} catch (java.lang.IndexOutOfBoundsException e) {
+			(new WarningMessage("This set may not have been added")).setVisible(true);
+			error = true;
+		}
+		(new SetWindow(false)).setVisible(!error);
 	}
 
 	private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
+		try {
+		output.remove(jComboBox1.getSelectedIndex());
+		cts.remove(jComboBox1.getSelectedIndex());
+		side1.remove(jComboBox1.getSelectedIndex());
+		xDir.remove(jComboBox1.getSelectedIndex());
+		yDir.remove(jComboBox1.getSelectedIndex());
+		xVal.remove(jComboBox1.getSelectedIndex());
+		yVal.remove(jComboBox1.getSelectedIndex());
+		ydIndex.remove(jComboBox1.getSelectedIndex());
+		vertIndex.remove(jComboBox1.getSelectedIndex());
+		System.out.println(jComboBox1.getSelectedIndex());
+		DotAgentGUI.updateComboBox();
+		} catch (java.lang.IndexOutOfBoundsException e) {
+			(new WarningMessage("This set may not have been added")).setVisible(true);
+		}
 	}
 
 	private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
+		cts.clear();
+		output.clear();
+		side1.clear();
+		xDir.clear();
+		yDir.clear();
+		xVal.clear();
+		yVal.clear();
+		ydIndex.clear();
+		vertIndex.clear();
+		DotAgentGUI.updateComboBox();
 	}
 
 	private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here
-		cts.add(494);
-		cts.add(503);
+		// cts.add(494);
+		// cts.add(503);
 		try {
-		FieldDiagramWindow.createAndShowGui(output, cts, Integer.parseInt(jTextField1.getText()));
+			FieldDiagramWindow.createAndShowGui(output, cts, Integer.parseInt(jTextField1.getText()));
 		} catch (NumberFormatException e) {
-			(new WarningMessage(new javax.swing.JFrame(), true)).setVisible(true);
+			(new WarningMessage("Please make sure you entered all parameters correctly.")).setVisible(true);
 		}
 	}
 
@@ -272,7 +331,10 @@ public class DotAgentGUI extends javax.swing.JFrame {
 		/* Create and display the form */
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				new DotAgentGUI().setVisible(true);
+				DotAgentGUI instance = new DotAgentGUI();
+				instance.setVisible(true);
+				DotAgentGUI.updateComboBox(0);
+				
 				// output = CalculationFunctions.getPoints(output, 8, Side.TWO,
 				// Location.FRONT_HASH, 50, DirectionX.OUT, DirectionY.FRONT, 0,0);
 			}
@@ -284,6 +346,35 @@ public class DotAgentGUI extends javax.swing.JFrame {
 		output = CalculationFunctions.getPoints(output, counts, side, loc, line, dx, dy, stepsx, stepsy);
 	}
 
+	private static void updateComboBox(int init) {
+		int total = output.size();
+		jComboBox1.removeAllItems();
+
+		for (int i = 0; i < total+1; i++) {
+			jComboBox1.addItem("" + (init + i));
+		}
+		if (total != 0) {
+			jComboBox1.setSelectedIndex(total);
+		}
+
+	}
+
+	public static void updateComboBox() {
+		try {
+			updateComboBox(Integer.parseInt(jTextField1.getText()));
+		} catch (java.lang.NumberFormatException ex) {
+			(new WarningMessage("Please make sure you entered the initial set correctly.")).setVisible(true);
+		}
+	}
+
+	public static boolean getSetLabelState() {
+		return setLabels;
+	}
+
+	public static boolean getCountLabelState() {
+		return countLabels;
+	}
+
 	// Variables declaration - do not modify
 	private javax.swing.JButton jButton1;
 	private javax.swing.JButton jButton2;
@@ -292,13 +383,13 @@ public class DotAgentGUI extends javax.swing.JFrame {
 	private javax.swing.JButton jButton6;
 	private javax.swing.JCheckBox jCheckBox1;
 	private javax.swing.JCheckBox jCheckBox2;
-	private javax.swing.JComboBox<String> jComboBox1;
+	public static javax.swing.JComboBox<String> jComboBox1;
 	private javax.swing.JLabel jLabel1;
 	private javax.swing.JLabel jLabel2;
 	private javax.swing.JLabel jLabel3;
 	private javax.swing.JLabel jLabel4;
 	private javax.swing.JLabel jLabel5;
-	private javax.swing.JTextField jTextField1;
+	private static javax.swing.JTextField jTextField1;
 	private javax.swing.JTextField jTextField2;
 	// End of variables declaration
 }

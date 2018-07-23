@@ -75,12 +75,15 @@ public class FieldDiagramWindow extends JPanel {
 			int x1 = (int) (data.get(i)[0] * xScale + BORDER_GAP + XORIGIN_OFFSET);
 			int y1 = (int) ((data.get(i)[1]) * yScale + BORDER_GAP + YORIGIN_OFFSET);
 			p = new Point(x1, y1);
-			JLabel ptLbl = new JLabel("" + (i + initSet));
-			ptLbl.setBounds(x1, y1, 20, 20);
-			ptLbl.setForeground(Color.YELLOW);
-			ptLbl.setVisible(true);
-			this.add(ptLbl);
+			if (DotAgentGUI.getSetLabelState()) {
+				JLabel ptLbl = new JLabel("" + (i + initSet));
+				ptLbl.setBounds(x1, y1, 25, 20);
+				ptLbl.setForeground(Color.YELLOW);
+				ptLbl.setVisible(true);
+				this.add(ptLbl);
+			}
 			graphPoints.add(p);
+
 		}
 
 		Stroke oldStroke = g2.getStroke();
@@ -91,7 +94,7 @@ public class FieldDiagramWindow extends JPanel {
 			int y1 = graphPoints.get(i).y;
 			int x2 = graphPoints.get(i + 1).x;
 			int y2 = graphPoints.get(i + 1).y;
-			if (!(data.size() == 1)) {
+			if ((!(data.size() == 1))&&DotAgentGUI.getCountLabelState()) {
 				JLabel ptLbl = new JLabel(counts.get(i + 1).toString());
 				ptLbl.setHorizontalAlignment(JLabel.CENTER);
 				ptLbl.setBounds(x1 / 2 + x2 / 2 - 20, y1 / 2 + y2 / 2 - 25, 40, 40);
@@ -161,12 +164,12 @@ public class FieldDiagramWindow extends JPanel {
 
 	public static void createAndShowGui(List<Double[]> points, List<Integer> cts, int init) {
 
-//		Double[] xy = { (double) 0, (double) 0 }; // Testing purposes only
-//		Double[] xy2 = { (double) 50, (double) 50 }; // Do not touch
-//		Double[] xy3 = { (double) 100, (double) 80 }; // Do not touch
-//		points.add(xy);
-//		points.add(xy2);
-//		points.add(xy3); // Please
+		// Double[] xy = { (double) 0, (double) 0 }; // Testing purposes only
+		// Double[] xy2 = { (double) 50, (double) 50 }; // Do not touch
+		// Double[] xy3 = { (double) 100, (double) 80 }; // Do not touch
+		// points.add(xy);
+		// points.add(xy2);
+		// points.add(xy3); // Please
 
 		FieldDiagramWindow mainPanel = new FieldDiagramWindow(points, cts, init);
 
@@ -178,7 +181,7 @@ public class FieldDiagramWindow extends JPanel {
 		JFrame frame = new JFrame("Field Diagram");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		JButton saveBtn = new JButton(new ImageIcon("wincap.png"));
-		ImageIcon icon = new ImageIcon("Novi-Logo.png");
+		ImageIcon icon = new ImageIcon("Novi-Logo2.png");
 		JLabel logoLbl = new JLabel(icon);
 		final KeyStroke cStroke = KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_MASK);
 		final ActionListener cKeyListener = new ActionListener() {
@@ -212,7 +215,7 @@ public class FieldDiagramWindow extends JPanel {
 		saveBtn.registerKeyboardAction(escKeyListener, escStroke, 0);
 		frame.setContentPane(mainPanel);
 		frame.setLayout(null);
-		frame.setIconImage(icon.getImage());
+		frame.setIconImage((new ImageIcon("Novi-Logo.png")).getImage());
 		saveBtn.setBackground(new Color(13, 170, 82));
 		saveBtn.setBounds(555, 320, 40, 40);
 		logoLbl.setBounds(555, 0, 40, 40);

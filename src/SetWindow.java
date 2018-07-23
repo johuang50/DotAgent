@@ -64,19 +64,47 @@ public class SetWindow extends javax.swing.JFrame {
 				jButton1ActionPerformed(evt);
 			}
 		});
+
+		jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(
+				new String[] { "0", "5", "10", "15", "20", "25", "30", "35", "40", "45", "50" }));
+
+		jComboBox2.setModel(
+				new javax.swing.DefaultComboBoxModel<>(new String[] { "Front SL", "Front H", "Back H", "Back SL" }));
+
 		if (!adding) {
 			jButton1.setText("Edit Set");
+			try {
+
+				jRadioButton1.setSelected(DotAgentGUI.side1.get(DotAgentGUI.jComboBox1.getSelectedIndex()));
+				jRadioButton2.setSelected(!(DotAgentGUI.side1.get(DotAgentGUI.jComboBox1.getSelectedIndex())));
+
+				jToggleButton1.setSelected(DotAgentGUI.xDir.get(DotAgentGUI.jComboBox1.getSelectedIndex()));
+				jToggleButton2.setSelected(DotAgentGUI.yDir.get(DotAgentGUI.jComboBox1.getSelectedIndex()));
+
+				jTextField1.setText((DotAgentGUI.cts.get(DotAgentGUI.jComboBox1.getSelectedIndex())).toString());
+				jTextField2.setText(DotAgentGUI.xVal.get(DotAgentGUI.jComboBox1.getSelectedIndex()));
+				jTextField3.setText(DotAgentGUI.yVal.get(DotAgentGUI.jComboBox1.getSelectedIndex()));
+
+				jComboBox1.setSelectedIndex(DotAgentGUI.ydIndex.get(DotAgentGUI.jComboBox1.getSelectedIndex()));
+				jComboBox2.setSelectedIndex(DotAgentGUI.vertIndex.get(DotAgentGUI.jComboBox1.getSelectedIndex()));
+
+			} catch (java.lang.IndexOutOfBoundsException e) {
+				System.out.println("Whatever this was already thrown.......");
+			}
 		}
 
 		jLabel3.setText("Yard Line:");
 
-		jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0", "10", "20", "30", "40", "50" }));
-
 		jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
 		jLabel4.setText("Steps In/Out:");
 
-		jToggleButton1.setText("Inward");
+		if (jToggleButton1.isSelected()) {
+			jToggleButton1.setText("Outward");
+		} else {
+			jToggleButton1.setText("Inward");
+		}
 		jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				jToggleButton1ActionPerformed(evt);
 			}
@@ -84,12 +112,14 @@ public class SetWindow extends javax.swing.JFrame {
 
 		jLabel5.setText("Vertical Mark:");
 
-		jComboBox2.setModel(
-				new javax.swing.DefaultComboBoxModel<>(new String[] { "Front SL", "Front H", "Back H", "Back SL" }));
-
 		jLabel6.setText("Steps Off:");
 
-		jToggleButton2.setText("Forward");
+		if (jToggleButton2.isSelected()) {
+			jToggleButton2.setText("Backward");
+		} else {
+			jToggleButton2.setText("Forward");
+		}
+
 		jToggleButton2.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				jToggleButton2ActionPerformed(evt);
@@ -202,51 +232,69 @@ public class SetWindow extends javax.swing.JFrame {
 	}
 
 	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+		if (!adding) {
+			DotAgentGUI.output.remove(DotAgentGUI.jComboBox1.getSelectedIndex());
+			DotAgentGUI.cts.remove(DotAgentGUI.jComboBox1.getSelectedIndex());
+			DotAgentGUI.xVal.remove(DotAgentGUI.jComboBox1.getSelectedIndex());
+			DotAgentGUI.yVal.remove(DotAgentGUI.jComboBox1.getSelectedIndex());
+			DotAgentGUI.side1.remove(DotAgentGUI.jComboBox1.getSelectedIndex());
+			DotAgentGUI.xDir.remove(DotAgentGUI.jComboBox1.getSelectedIndex());
+			DotAgentGUI.yDir.remove(DotAgentGUI.jComboBox1.getSelectedIndex());
+			DotAgentGUI.ydIndex.remove(DotAgentGUI.jComboBox1.getSelectedIndex());
+			DotAgentGUI.vertIndex.remove(DotAgentGUI.jComboBox1.getSelectedIndex());
+		}
 		DirectionX x;
 		if (jToggleButton1.isSelected()) {
 			x = DirectionX.OUT;
-		}
-		else {
+		} else {
 			x = DirectionX.IN;
 		}
 		DirectionY y;
 		if (jToggleButton2.isSelected()) {
 			y = DirectionY.BEHIND;
-		}
-		else {
+		} else {
 			y = DirectionY.FRONT;
 		}
 		Location l;
-		if (jComboBox2.getSelectedIndex()==0) {
+		if (jComboBox2.getSelectedIndex() == 0) {
 			l = Location.FRONT_SIDELINE;
-		} 
-		else if (jComboBox2.getSelectedIndex()==1) {
+		} else if (jComboBox2.getSelectedIndex() == 1) {
 			l = Location.FRONT_HASH;
-		} 
-		else if (jComboBox2.getSelectedIndex()==2) {
+		} else if (jComboBox2.getSelectedIndex() == 2) {
 			l = Location.BACK_HASH;
-		} 
-		else {
+		} else {
 			l = Location.BACK_SIDELINE;
-		} 
+		}
 		try {
 			// TODO add your handling code here:
 			if (jRadioButton1.isSelected()) {
-				DotAgentGUI.updateSets(Integer.parseInt(jTextField1.getText()), Side.ONE, l, jComboBox1.getSelectedIndex()*10,
-						x, y, Double.parseDouble(jTextField2.getText()),
+				DotAgentGUI.updateSets(Integer.parseInt(jTextField1.getText()), Side.ONE, l,
+						jComboBox1.getSelectedIndex() * 5, x, y, Double.parseDouble(jTextField2.getText()),
 						Double.parseDouble(jTextField3.getText()));
 			} else if (jRadioButton2.isSelected()) {
-				DotAgentGUI.updateSets(Integer.parseInt(jTextField1.getText()), Side.TWO, l,  jComboBox1.getSelectedIndex()*10,
-						x, y, Double.parseDouble(jTextField2.getText()),
+				DotAgentGUI.updateSets(Integer.parseInt(jTextField1.getText()), Side.TWO, l,
+						jComboBox1.getSelectedIndex() * 5, x, y, Double.parseDouble(jTextField2.getText()),
 						Double.parseDouble(jTextField3.getText()));
 			} else {
-				(new WarningMessage(new javax.swing.JFrame(), true)).setVisible(true);
+				(new WarningMessage("Please indicate the side of the field.")).setVisible(true);
 			}
+			DotAgentGUI.cts.add(DotAgentGUI.jComboBox1.getSelectedIndex(), Integer.parseInt(jTextField1.getText()));
+			DotAgentGUI.xVal.add(DotAgentGUI.jComboBox1.getSelectedIndex(), jTextField2.getText());
+			DotAgentGUI.yVal.add(DotAgentGUI.jComboBox1.getSelectedIndex(), jTextField3.getText());
+			DotAgentGUI.xDir.add(DotAgentGUI.jComboBox1.getSelectedIndex(), jToggleButton1.isSelected());
+			DotAgentGUI.yDir.add(DotAgentGUI.jComboBox1.getSelectedIndex(), jToggleButton2.isSelected());
+			DotAgentGUI.ydIndex.add(DotAgentGUI.jComboBox1.getSelectedIndex(), jComboBox1.getSelectedIndex());
+			DotAgentGUI.vertIndex.add(DotAgentGUI.jComboBox1.getSelectedIndex(), jComboBox2.getSelectedIndex());
+
 			if (jRadioButton1.isSelected() || jRadioButton2.isSelected()) {
+				DotAgentGUI.side1.add(DotAgentGUI.jComboBox1.getSelectedIndex(), jRadioButton1.isSelected());
+				if (adding) {
+					DotAgentGUI.updateComboBox();
+				}
 				this.setVisible(false);
 			}
 		} catch (java.lang.NumberFormatException e) {
-			(new WarningMessage(new javax.swing.JFrame(), true)).setVisible(true);
+			(new WarningMessage("Please make sure you entered the initial set correctly")).setVisible(true);
 		}
 	}
 
