@@ -1,3 +1,8 @@
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.File;
+import java.io.IOException;
+
 /**
  *
  * @author Joshua
@@ -132,6 +137,8 @@ public class SetWindow extends javax.swing.JFrame {
 				jButton2ActionPerformed(evt);
 			}
 		});
+		
+		darkTheme();
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
@@ -302,6 +309,92 @@ public class SetWindow extends javax.swing.JFrame {
 		// TODO add your handling code here:
 		this.setVisible(false);
 	}
+	
+	private void darkTheme() {
+		java.awt.Color bg = new java.awt.Color(73, 73, 73);
+		java.awt.Color fg = new java.awt.Color(68, 237, 79);
+		java.awt.Color bc = new java.awt.Color(48, 168, 56);
+		java.awt.Color borderColor = new java.awt.Color(69, 125, 73);
+		javax.swing.border.Border b = javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED,
+				borderColor, fg);
+		
+		getContentPane().setBackground(bg);
+		jLabel1.setForeground(fg);
+		jLabel2.setForeground(fg);
+		jLabel3.setForeground(fg);
+		jLabel4.setForeground(fg);
+		jLabel5.setForeground(fg);
+		jLabel6.setForeground(fg);
+		jRadioButton1.setForeground(fg);
+		jRadioButton2.setForeground(fg);
+		
+		jButton1.setBackground(bc);
+		jButton2.setBackground(bc);
+		jToggleButton1.setBackground(bc);
+		jToggleButton2.setBackground(bc);
+		jComboBox1.setBackground(java.awt.Color.GRAY);
+		jComboBox2.setBackground(java.awt.Color.GRAY);
+		
+		jTextField1.setBorder(b);
+		jTextField2.setBorder(b);
+		jTextField3.setBorder(b);
+		
+		java.awt.Font font = null;
+		File font_file = new File("BankGothic Bold.ttf");
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT, font_file);
+			font = font.deriveFont(11.0f);
+		} catch (FontFormatException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		jLabel1.setFont(font);
+		jLabel2.setFont(font);
+		jLabel3.setFont(font);
+		jLabel4.setFont(font);
+		jLabel5.setFont(font);
+		jLabel6.setFont(font);
+		jButton1.setFont(font);
+		jButton2.setFont(font);
+		jToggleButton1.setFont(font);
+		jToggleButton2.setFont(font);
+		jComboBox1.setFont(font);
+		jComboBox2.setFont(font);
+		jTextField1.setFont(font);
+		jTextField2.setFont(font);
+		jTextField3.setFont(font);
+		jRadioButton1.setFont(font);
+		jRadioButton2.setFont(font);
+	}
+
+//	@SuppressWarnings("unused")
+//	public static void writeToFile(String msg) {
+//
+//		String s = System.lineSeparator();
+//		// try {
+//		// java.nio.file.Files.write(java.nio.file.Paths.get("SetLogs/"+DotAgentGUI.jTextField2.getText()+".txt"),
+//		// s.getBytes(),
+//		// java.nio.file.StandardOpenOption.APPEND);
+//		// java.nio.file.Files.write(java.nio.file.Paths.get("SetLogs/"+DotAgentGUI.jTextField2.getText()+".txt"),
+//		// (msg).getBytes(), java.nio.file.StandardOpenOption.APPEND);
+//		// } catch (java.io.IOException e) {
+//		java.io.File dir = new java.io.File("SetLogs");
+//		dir.mkdirs();
+////		java.io.File file = new java.io.File(dir, DotAgentGUI.jTextField2.getText() + ".txt");
+//		try {
+//			java.io.PrintWriter display = new java.io.PrintWriter(
+//					"SetLogs/" + DotAgentGUI.jTextField2.getText() + ".txt");
+//			display.print(msg);
+//			display.print(s);
+//			display.close();
+//
+//		} catch (java.io.FileNotFoundException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		// }
+//
+//	}
 
 	/**
 	 * @param args

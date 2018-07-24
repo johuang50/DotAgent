@@ -1,6 +1,10 @@
 
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -13,7 +17,7 @@ import javax.swing.KeyStroke;
  *
  * @author Joshua
  */
-public class WarningMessage extends javax.swing.JDialog {
+public class WarningMessage extends javax.swing.JFrame {
 
 	/**
 	 * A return status code - returned if Cancel button has been pressed
@@ -30,7 +34,7 @@ public class WarningMessage extends javax.swing.JDialog {
 	 * Creates new form WarningMessage
 	 */
 	public WarningMessage(String m) {
-		super(new javax.swing.JFrame(), true);
+//		super(new javax.swing.JFrame(), true);
 		message = m;
 		initComponents();
 
@@ -67,7 +71,7 @@ public class WarningMessage extends javax.swing.JDialog {
 		jLabel2 = new javax.swing.JLabel();
 		this.setIconImage((new ImageIcon("warn.png")).getImage());
 
-		setTitle("Error No. VI                             (<<<ha see wut i did ther)");
+		setTitle("Error No. VI");
 		addWindowListener(new java.awt.event.WindowAdapter() {
 			public void windowClosing(java.awt.event.WindowEvent evt) {
 				closeDialog(evt);
@@ -87,6 +91,26 @@ public class WarningMessage extends javax.swing.JDialog {
 		}
 		jLabel1.setText("Warning: " + message);
 		jLabel2.setIcon(new javax.swing.ImageIcon("warn.png")); // NOI18N
+		
+		java.awt.Color bg = new java.awt.Color(73, 73, 73);
+		java.awt.Color fg = new java.awt.Color(68, 237, 79);
+		java.awt.Color bc = new java.awt.Color(23, 122, 29);
+		
+		getContentPane().setBackground(bg);
+		
+		java.awt.Font font = null;
+		File font_file = new File("BankGothic Bold.ttf");
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT, font_file);
+			font = font.deriveFont(11.0f);
+		} catch (FontFormatException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		jLabel1.setFont(font);
+		okButton.setFont(font);
+		jLabel1.setForeground(fg);
+		okButton.setBackground(bc);
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);

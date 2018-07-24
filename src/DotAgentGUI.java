@@ -1,5 +1,7 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.File;
+import java.io.IOException;
 
 /**
  *
@@ -7,15 +9,15 @@ import java.util.List;
  */
 public class DotAgentGUI extends javax.swing.JFrame {
 
-	public static List<Double[]> output = new ArrayList<Double[]>();
-	public static List<Integer> cts = new ArrayList<Integer>();
-	public static List<String> xVal = new ArrayList<String>();
-	public static List<String> yVal = new ArrayList<String>();
-	public static List<Boolean> side1 = new ArrayList<Boolean>();
-	public static List<Boolean> xDir = new ArrayList<Boolean>();
-	public static List<Boolean> yDir = new ArrayList<Boolean>();
-	public static List<Integer> ydIndex = new ArrayList<Integer>();
-	public static List<Integer> vertIndex = new ArrayList<Integer>();
+	public static java.util.List<Double[]> output = new java.util.ArrayList<Double[]>();
+	public static java.util.List<Integer> cts = new java.util.ArrayList<Integer>();
+	public static java.util.List<String> xVal = new java.util.ArrayList<String>();
+	public static java.util.List<String> yVal = new java.util.ArrayList<String>();
+	public static java.util.List<Boolean> side1 = new java.util.ArrayList<Boolean>();
+	public static java.util.List<Boolean> xDir = new java.util.ArrayList<Boolean>();
+	public static java.util.List<Boolean> yDir = new java.util.ArrayList<Boolean>();
+	public static java.util.List<Integer> ydIndex = new java.util.ArrayList<Integer>();
+	public static java.util.List<Integer> vertIndex = new java.util.ArrayList<Integer>();
 	private static boolean setLabels = true;
 	private static boolean countLabels = true;
 
@@ -62,7 +64,7 @@ public class DotAgentGUI extends javax.swing.JFrame {
 		jTextField1.setToolTipText("Press ENTER to update");
 
 		jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-		jLabel1.setText("NOVI WILDCAT MARCHING BAND DOT AGENT 2018");
+		jLabel1.setText("Welcome to the Novi Dot Agent");
 
 		jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
 		jLabel2.setText("Selcted Set:");
@@ -111,7 +113,12 @@ public class DotAgentGUI extends javax.swing.JFrame {
 		jButton6.setText("View Agent");
 		jButton6.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jButton6ActionPerformed(evt);
+				try {
+					jButton6ActionPerformed(evt);
+				} catch (java.io.IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 
@@ -135,6 +142,8 @@ public class DotAgentGUI extends javax.swing.JFrame {
 		jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
 		jLabel5.setText("©Joshua Huang 2018");
 		jLabel5.setToolTipText("Copyright Joshua Huang 2018");
+		
+		darkTheme();
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
@@ -241,7 +250,7 @@ public class DotAgentGUI extends javax.swing.JFrame {
 		// TODO add your handling code here:
 		boolean error = false;
 		try {
-			cts.get(jComboBox1.getSelectedIndex());			
+			cts.get(jComboBox1.getSelectedIndex());
 		} catch (java.lang.IndexOutOfBoundsException e) {
 			(new WarningMessage("This set may not have been added")).setVisible(true);
 			error = true;
@@ -252,19 +261,19 @@ public class DotAgentGUI extends javax.swing.JFrame {
 	private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
 		try {
-		output.remove(jComboBox1.getSelectedIndex());
-		cts.remove(jComboBox1.getSelectedIndex());
-		side1.remove(jComboBox1.getSelectedIndex());
-		xDir.remove(jComboBox1.getSelectedIndex());
-		yDir.remove(jComboBox1.getSelectedIndex());
-		xVal.remove(jComboBox1.getSelectedIndex());
-		yVal.remove(jComboBox1.getSelectedIndex());
-		ydIndex.remove(jComboBox1.getSelectedIndex());
-		vertIndex.remove(jComboBox1.getSelectedIndex());
-		System.out.println(jComboBox1.getSelectedIndex());
-		DotAgentGUI.updateComboBox();
+			output.remove(jComboBox1.getSelectedIndex());
+			cts.remove(jComboBox1.getSelectedIndex());
+			side1.remove(jComboBox1.getSelectedIndex());
+			xDir.remove(jComboBox1.getSelectedIndex());
+			yDir.remove(jComboBox1.getSelectedIndex());
+			xVal.remove(jComboBox1.getSelectedIndex());
+			yVal.remove(jComboBox1.getSelectedIndex());
+			ydIndex.remove(jComboBox1.getSelectedIndex());
+			vertIndex.remove(jComboBox1.getSelectedIndex());
+			System.out.println(jComboBox1.getSelectedIndex());
+			DotAgentGUI.updateComboBox();
 		} catch (java.lang.IndexOutOfBoundsException e) {
-			(new WarningMessage("This set may not have been added")).setVisible(true);
+			(new WarningMessage("This set may have not been added")).setVisible(true);
 		}
 	}
 
@@ -282,14 +291,91 @@ public class DotAgentGUI extends javax.swing.JFrame {
 		DotAgentGUI.updateComboBox();
 	}
 
-	private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {
+	private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) throws java.io.IOException {
 		// TODO add your handling code here
 		// cts.add(494);
 		// cts.add(503);
+		boolean write = true;
 		try {
 			FieldDiagramWindow.createAndShowGui(output, cts, Integer.parseInt(jTextField1.getText()));
 		} catch (NumberFormatException e) {
 			(new WarningMessage("Please make sure you entered all parameters correctly.")).setVisible(true);
+			write = false;
+		}
+
+		if ((!jTextField2.getText().isEmpty()) && write) {
+			int sets = output.size();
+			int set;
+			int counts;
+			boolean sideOne;
+			boolean outside;
+			boolean backward;
+			String sideVal;
+			String vertVal;
+			int yard;
+			int loc;
+			String s;
+			String message = "";
+			String line = System.lineSeparator();
+			String dirx;
+			String diry;
+			String vertMark;
+
+			java.io.File dir = new java.io.File("SetLogs");
+			dir.mkdirs();
+			java.io.File file = new java.io.File(dir, DotAgentGUI.jTextField2.getText() + ".txt");
+			try {
+				java.io.PrintWriter display = new java.io.PrintWriter(
+						"SetLogs/" + DotAgentGUI.jTextField2.getText() + ".txt");
+
+				for (int i = 0; i < sets; i++) {
+					set = i + Integer.parseInt(jTextField1.getText());
+					counts = cts.get(i);
+					sideOne = side1.get(i);
+					outside = xDir.get(i);
+					backward = yDir.get(i);
+					sideVal = xVal.get(i);
+					vertVal = yVal.get(i);
+					yard = ydIndex.get(i) * 5;
+					loc = vertIndex.get(i);
+					if (sideOne)
+						s = "1";
+					else
+						s = "2";
+					if (loc == 0)
+						vertMark = "FS";
+					else if (loc == 1)
+						vertMark = "FH";
+					else if (loc == 2)
+						vertMark = "BH";
+					else
+						vertMark = "BS";
+					if (outside)
+						dirx = " Out ";
+					else
+						dirx = " In ";
+					if (backward)
+						diry = " Behind ";
+					else
+						diry = " Front ";
+					if (sideVal.equals("0")) {
+						sideVal = "";
+						dirx = "On ";
+					}
+					if (vertVal.equals("0")) {
+						vertVal = "";
+						diry = "On ";
+					}
+					message = "Set: " + set + "  C: " + counts + "  S" + s + "   " + sideVal + dirx + yard + "     "
+							+ vertVal + diry + vertMark;
+					display.print(message);
+					display.print(line);
+				}
+				display.close();
+			} catch (java.io.FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 
@@ -334,11 +420,74 @@ public class DotAgentGUI extends javax.swing.JFrame {
 				DotAgentGUI instance = new DotAgentGUI();
 				instance.setVisible(true);
 				DotAgentGUI.updateComboBox(0);
-				
+
 				// output = CalculationFunctions.getPoints(output, 8, Side.TWO,
 				// Location.FRONT_HASH, 50, DirectionX.OUT, DirectionY.FRONT, 0,0);
 			}
 		});
+	}
+	
+	private void darkTheme() {
+		// TODO Auto-generated method stub
+		java.awt.Color bg = new java.awt.Color(73, 73, 73);
+		java.awt.Color fg = new java.awt.Color(68, 237, 79);
+		java.awt.Color bc = new java.awt.Color(48, 168, 56);
+		java.awt.Color borderColor = new java.awt.Color(69, 125, 73);
+		javax.swing.border.Border b = javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED,
+				borderColor, fg);
+		
+		jLabel1.setForeground(java.awt.Color.WHITE);
+		jLabel2.setForeground(fg);
+		jLabel3.setForeground(fg);
+		jLabel4.setForeground(fg);
+		jLabel5.setForeground(java.awt.Color.WHITE);
+		jCheckBox1.setForeground(fg);
+		jCheckBox2.setForeground(fg);
+		jComboBox1.setForeground(fg);
+		
+		getContentPane().setBackground(bg);
+		jComboBox1.setBackground(java.awt.Color.GRAY);
+		jCheckBox1.setBackground(bg);
+		jTextField1.setBorder(b);
+		jTextField2.setBorder(b);
+		jButton1.setBackground(bc);
+		jButton2.setBackground(bc);
+		jButton3.setBackground(bc);
+		jButton4.setBackground(bc);
+		jButton6.setBackground(bc);
+		
+		java.awt.Font font = null;
+		File font_file = new File("BankGothic Bold.ttf");
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT, font_file);
+			font = font.deriveFont(27.0f);
+		} catch (FontFormatException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		java.awt.Font font2 = null;
+		try {
+			font2 = Font.createFont(Font.TRUETYPE_FONT, font_file);
+			font2 = font.deriveFont(12.0f);
+		} catch (FontFormatException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		jLabel1.setFont(font);
+		jButton1.setFont(font2);
+		jButton2.setFont(font2);
+		jButton3.setFont(font2);
+		jButton4.setFont(font2);
+		jButton6.setFont(font2);
+		jCheckBox1.setFont(font2);
+		jCheckBox2.setFont(font2);
+		jComboBox1.setFont(font2);
+		jLabel2.setFont(font2);
+		jLabel3.setFont(font2);
+		jLabel4.setFont(font2);
+		jTextField1.setFont(font2);
+		jTextField2.setFont(font2);
+		
 	}
 
 	public static void updateSets(int counts, Side side, Location loc, int line, DirectionX dx, DirectionY dy,
@@ -350,13 +499,22 @@ public class DotAgentGUI extends javax.swing.JFrame {
 		int total = output.size();
 		jComboBox1.removeAllItems();
 
-		for (int i = 0; i < total+1; i++) {
+		for (int i = 0; i < total + 1; i++) {
 			jComboBox1.addItem("" + (init + i));
 		}
 		if (total != 0) {
 			jComboBox1.setSelectedIndex(total);
 		}
 
+	}
+
+	private void writeToFile(String msg) throws java.io.IOException {
+		// TODO Auto-generated method stub
+		String s = System.lineSeparator();
+		java.nio.file.Files.write(java.nio.file.Paths.get("SetLogs/" + DotAgentGUI.jTextField2.getText() + ".txt"),
+				(msg).getBytes(), java.nio.file.StandardOpenOption.APPEND);
+		java.nio.file.Files.write(java.nio.file.Paths.get("SetLogs/" + DotAgentGUI.jTextField2.getText() + ".txt"),
+				s.getBytes(), java.nio.file.StandardOpenOption.APPEND);
 	}
 
 	public static void updateComboBox() {
@@ -390,6 +548,6 @@ public class DotAgentGUI extends javax.swing.JFrame {
 	private javax.swing.JLabel jLabel4;
 	private javax.swing.JLabel jLabel5;
 	private static javax.swing.JTextField jTextField1;
-	private javax.swing.JTextField jTextField2;
+	public static javax.swing.JTextField jTextField2;
 	// End of variables declaration
 }
