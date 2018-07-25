@@ -1,0 +1,14 @@
+
+
+Version:	3.10
+CmdLine:	C:\Users\Owner\Documents\GitHub\DotAgent\DotAgent.exe --l4j-debug
+WOW64:		yes
+Working dir:	C:\Users\Owner\Documents\GitHub\DotAgent\.
+Java min ver:	
+Java max ver:	
+Bundled JRE:	jre1.8.0_65
+Check launcher:	C:\Users\Owner\Documents\GitHub\DotAgent\jre1.8.0_65\bin\javaw.exe (OK)
+Launcher:	C:\Users\Owner\Documents\GitHub\DotAgent\jre1.8.0_65\bin\javaw.exe
+Launcher args:	-jar "C:\Users\Owner\Documents\GitHub\DotAgent\DotAgent.exe"
+Args length:	60/32768 chars
+Exit code:	0
